@@ -68,3 +68,41 @@ def classify_border_and_core_points(X, p=2, close=100, percentile=60):
     core_points = X[distances < threshold_distance]
     
     return border_points, core_points
+
+def classify_border_and_core_points_multiclass(X, y, p=2, close=100, percentile=60):
+    """
+    Classify the points in a multiclass dataset as 'border' or 'core' for each class.
+    
+    Parameters:
+    X : np.ndarray
+        The dataset (n_samples, n_features).
+    y : np.ndarray
+        The class labels for the dataset (n_samples,).
+    p : int
+        The norm to use for distance calculation (default is Euclidean norm, p=2).
+    close : int
+        The number of closest points to consider for the distance calculation (default=100).
+    percentile : float
+        The threshold percentile for defining border points (default=60).
+    
+    Returns:
+    class_border_core_dict : dict
+        A dictionary where keys are class labels and values are tuples containing
+        (border_points, core_points) for each class.
+    """
+    class_border_core_dict = {}
+    
+    # Get unique classes in the dataset
+    unique_classes = np.unique(y)
+    
+    for cls in unique_classes:
+        # Extract points belonging to the current class
+        X_class = X[y == cls]
+        
+        # Classify points into border and core for the current class
+        border_points, core_points = classify_border_and_core_points(X_class, p=p, close=close, percentile=percentile)
+        
+        # Store the border and core points in the dictionary
+        class_border_core_dict[cls] = (border_points, core_points)
+    
+    return class_border_core_dict
