@@ -1,3 +1,9 @@
+# Installation
+Assuming you're in current directory running the following command.
+```
+pip install -e .
+```
+
 # Example usage
 
 ```py
