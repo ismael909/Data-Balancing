@@ -21,5 +21,21 @@ print(f"Number of border points: {border_points.shape[0]}")
 print(f"Number of core points: {core_points.shape[0]}")
 ```
 
-# Note
-Implementation only works for single class dataset. This means if you have more than one class and want to get their respective border and core points, the classify_border_and_core_points have to be applied on one class's points at a time.
+```py
+# Import the functions from the installed library
+from border_detection_minimal.border_detection_minimal import classify_border_and_core_points_multiclass
+
+# Generate random data points for the example (1000 points in 2D space, with 3 classes)
+import numpy as np
+np.random.seed(42)
+X = np.random.rand(1000, 2)
+y = np.random.randint(0, 3, size=1000)  # 3 classes (0, 1, 2)
+
+# Classify border and core points for each class
+class_border_core = classify_border_and_core_points_multiclass(X, y, p=2, close=100, percentile=60)
+
+for cls, (border, core) in class_border_core.items():
+    print(f"Class {cls}:")
+    print(f"  Number of border points: {border.shape[0]}")
+    print(f"  Number of core points: {core.shape[0]}")
+```
