@@ -20,3 +20,6 @@ border_points, core_points = classify_border_and_core_points(X, p=2, close=100, 
 print(f"Number of border points: {border_points.shape[0]}")
 print(f"Number of core points: {core_points.shape[0]}")
 ```
+
+# Note
+Implementation only works for single class dataset. This means if you have more than one class and want to get their respective border and core points, the classify_border_and_core_points have to be applied on one class's points at a time.
