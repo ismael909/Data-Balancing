@@ -53,9 +53,9 @@ def classify_border_and_core_points(X, p=2, close=100, percentile=60):
     
     Returns:
     border_points : np.ndarray
-        Points classified as 'border'.
+        Points classified as 'border', sorted by descending distance.
     core_points : np.ndarray
-        Points classified as 'core'.
+        Points classified as 'core', sorted by ascending distance.
     """
     # Calculate distances based on the closest 'close' points
     distances = calculate_distances_close(X, p, close)
@@ -63,9 +63,17 @@ def classify_border_and_core_points(X, p=2, close=100, percentile=60):
     # Calculate the distance threshold for border points
     threshold_distance = np.percentile(distances, percentile)
     
-    # Classify points as border or core based on the threshold
-    border_points = X[distances >= threshold_distance]
-    core_points = X[distances < threshold_distance]
+    # Separate and sort points as border or core based on the threshold
+    border_indices = np.where(distances >= threshold_distance)[0]
+    core_indices = np.where(distances < threshold_distance)[0]
+    
+    # Sort border points by descending distance
+    border_indices = border_indices[np.argsort(-distances[border_indices])]
+    # Sort core points by ascending distance
+    core_indices = core_indices[np.argsort(distances[core_indices])]
+    
+    border_points = X[border_indices]
+    core_points = X[core_indices]
     
     return border_points, core_points
 
